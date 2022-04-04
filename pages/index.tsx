@@ -1,23 +1,25 @@
 import type { NextPage } from 'next'
 import { useCallback, useEffect } from 'react'
-import { USER } from '../_axios/user'
 import { useRecoilState } from 'recoil'
-import { userState } from '../_recoil/state'
+import { isToken } from '../_recoil/state'
+import Sign from './_auth/sign'
 
 const Home: NextPage = () => {
-  const [isUser, setIsUser] = useRecoilState(userState)
+  const [isUser, setIsUser] = useRecoilState(isToken)
   const getCurrentUser = useCallback(async () => {
-    const user = await USER()
-    if (!user) {
-      setIsUser(null)
-    }
+    const token = window.localStorage.getItem('access_token')
+    setIsUser(!!token)
   }, [])
   useEffect(() => {
     getCurrentUser()
   }, [getCurrentUser])
   return (
-    <section>
-      {isUser ? <section>Home</section> : <section>Login</section>}
+    <section className="w-full h-screen">
+      {isUser ? (
+        <section className="overflow-y-scroll">Home</section>
+      ) : (
+        <Sign />
+      )}
     </section>
   )
 }

@@ -13,7 +13,7 @@ export type User = {
 }
 
 export const userState = atom<Omit<User, 'password'> | null>({
-  key: 'user',
+  key: 'userState',
   default: {
     pk: null,
     email: null,
@@ -24,4 +24,9 @@ export const userState = atom<Omit<User, 'password'> | null>({
     updateAt: null,
     deleteAt: null,
   },
+})
+
+export const isToken = atom<boolean>({
+  key: 'isToken',
+  default: false,
 })

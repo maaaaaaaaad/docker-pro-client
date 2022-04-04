@@ -12,6 +12,7 @@ instance.interceptors.request.use(
         Authorization: `Bearer ${token}`,
       }
     }
+
     return config
   },
   (err) => Promise.reject(err),
