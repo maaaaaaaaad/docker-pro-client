@@ -3,12 +3,16 @@ import { useCallback, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { isToken } from '../_recoil/state'
 import Sign from './_auth/sign'
+import { USER } from '../_axios/user'
 
 const Home: NextPage = () => {
   const [isUser, setIsUser] = useRecoilState(isToken)
   const getCurrentUser = useCallback(async () => {
-    const token = window.localStorage.getItem('access_token')
-    setIsUser(!!token)
+    const data = await USER()
+    if (!data) {
+      return setIsUser(false)
+    }
+    return setIsUser(true)
   }, [])
   useEffect(() => {
     getCurrentUser()
