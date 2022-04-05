@@ -18,9 +18,9 @@ const Home: NextPage = () => {
     getCurrentUser()
   }, [getCurrentUser])
   return (
-    <section className="w-full h-screen">
+    <section className="w-full h-full">
       {isUser ? (
-        <section className="overflow-y-scroll">Home</section>
+        <section className="overflow-y-scroll w-full h-full">Home</section>
       ) : (
         <Sign />
       )}

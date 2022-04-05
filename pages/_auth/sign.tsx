@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Login from './login'
+import Register from './register'
 
 function Sign() {
   const [toggle, setToggle] = useState<boolean>(false)
@@ -10,7 +11,11 @@ function Sign() {
 
   return (
     <section className="flex justify-center items-center w-full h-full">
-      {toggle ? <section>Register</section> : <Login onToggle={onToggle} />}
+      {toggle ? (
+        <Register onToggle={onToggle} />
+      ) : (
+        <Login onToggle={onToggle} />
+      )}
     </section>
   )
 }

@@ -1,62 +1,45 @@
 import React from 'react'
-import { useForm } from 'react-hook-form'
-import { isToken, User } from '../../_recoil/state'
 import FormErrorMessage from '../../components/error/formErrorMessage'
-import { LOGIN } from '../../_axios/user'
-import { useSetRecoilState } from 'recoil'
+import { User } from '../../_recoil/state'
+import { useForm } from 'react-hook-form'
 
-const socialImage = [
-  {
-    path: '/images/google.png',
-    alt: 'social-google',
-  },
-  {
-    path: '/images/kakao.png',
-    alt: 'social-kakao',
-  },
-  {
-    path: '/images/naver.png',
-    alt: 'social-naver',
-  },
-]
-
-interface ILogin {
+interface IRegister {
   onToggle: () => void
 }
 
-function Login({ onToggle }: ILogin) {
-  const setToken = useSetRecoilState(isToken)
+type RegisterForm = Pick<
+  User,
+  'email' | 'password' | 'avatarImage' | 'nickname'
+> & {
+  confirmPassword: string
+}
 
+function Register({ onToggle }: IRegister) {
   const {
     register,
     getValues,
     reset,
+    watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<Pick<User, 'email' | 'password'>>({ mode: 'onChange' })
+  } = useForm<RegisterForm>({
+    mode: 'onChange',
+  })
 
   const onSubmit = async () => {
     try {
       const form = getValues()
-      const {
-        data: { access, token, error },
-      } = await LOGIN(form)
-      if (!access) {
-        return window.alert(error)
-      }
-      window.localStorage.setItem('access_token', token)
-      setToken(!!window.localStorage.getItem('access_token'))
-      reset()
+      console.log(form)
     } catch (e) {
       console.log(e)
     }
   }
 
   return (
-    <section className="w-1/3 h-1/2">
+    <section className="w-1/3 h-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-rows-4 gap-2"
+        className="register grid grid-rows-8 gap-2"
       >
         <label>
           <h1>Email</h1>
@@ -105,27 +88,59 @@ function Login({ onToggle }: ILogin) {
           )}
         </section>
 
+        <label>
+          <h1>Confirm Password</h1>
+          <input
+            {...register('confirmPassword', {
+              validate: (v) =>
+                v === watch('password') || 'The passwords do not match',
+            })}
+            className="text_input"
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            placeholder="Confirm Password"
+          />
+        </label>
+        <section>
+          {errors.confirmPassword && errors.confirmPassword.message && (
+            <FormErrorMessage message={errors.confirmPassword.message} />
+          )}
+        </section>
+
+        <label>
+          <h1>Nickname</h1>
+          <input
+            {...register('nickname', {
+              required: 'You must specify a nickname',
+              pattern: {
+                value: /^[A-za-z0-9]{2,12}$/,
+                message: 'Please insert a valid nickname',
+              },
+            })}
+            className="text_input"
+            type="text"
+            name="nickname"
+            id="nickname"
+            placeholder="Nickname (2~12 char)"
+          />
+        </label>
+        <section>
+          {errors.nickname && errors.nickname.message && (
+            <FormErrorMessage message={errors.nickname.message} />
+          )}
+        </section>
+
         <button className="submit_btn" type="submit">
-          LOGIN
+          REGISTER
         </button>
       </form>
 
       <button className="toggle_link" type="button" onClick={onToggle}>
-        REGISTER
+        LOGIN
       </button>
-
-      <div className="flex justify-evenly mt-8">
-        {socialImage.map((logo, index) => (
-          <img
-            className="w-16 h-16 drop-shadow-2xl cursor-pointer"
-            key={index}
-            src={logo.path}
-            alt={logo.alt}
-          />
-        ))}
-      </div>
     </section>
   )
 }
 
-export default Login
+export default Register

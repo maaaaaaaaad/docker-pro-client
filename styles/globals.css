@@ -7,7 +7,7 @@ h1 {
 }
 
 .text_input {
-  @apply drop-shadow-md w-full outline-none border-b-2 border-y-gray-200 p-3;
+  @apply drop-shadow-md w-full outline-none border-b-2 border-y-gray-200 p-3 rounded-md;
 }
 
 .submit_btn {
