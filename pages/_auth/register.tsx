@@ -2,6 +2,7 @@ import React from 'react'
 import FormErrorMessage from '../../components/error/formErrorMessage'
 import { User } from '../../_recoil/state'
 import { useForm } from 'react-hook-form'
+import { REGISTER } from '../../_axios/user'
 
 interface IRegister {
   onToggle: () => void
@@ -18,7 +19,6 @@ function Register({ onToggle }: IRegister) {
   const {
     register,
     getValues,
-    reset,
     watch,
     handleSubmit,
     formState: { errors },
@@ -28,8 +28,16 @@ function Register({ onToggle }: IRegister) {
 
   const onSubmit = async () => {
     try {
-      const form = getValues()
-      console.log(form)
+      const values = getValues()
+      const { confirmPassword, ...form } = values
+      const {
+        data: { access, success, error },
+      } = await REGISTER(form)
+      if (!access) {
+        return window.alert(error)
+      }
+      window.alert(success)
+      return onToggle()
     } catch (e) {
       console.log(e)
     }

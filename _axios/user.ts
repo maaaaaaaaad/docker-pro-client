@@ -22,3 +22,13 @@ export const LOGIN = (data: Pick<User, 'email' | 'password'>) => {
     data,
   })
 }
+
+export const REGISTER = (
+  data: Pick<User, 'email' | 'password' | 'nickname'>,
+) => {
+  return Api({
+    method: Method.POST,
+    url: 'auth/register',
+    data,
+  })
+}
