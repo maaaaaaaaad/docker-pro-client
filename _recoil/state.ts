@@ -12,6 +12,11 @@ export type User = {
   deleteAt: Date | null
 }
 
+export const isLayout = atom({
+  key: 'isLayout',
+  default: true,
+})
+
 export const userState = atom<Omit<User, 'password'> | null>({
   key: 'userState',
   default: {

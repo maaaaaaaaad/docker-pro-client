@@ -4,8 +4,9 @@ import { useRecoilState } from 'recoil'
 import { isToken } from '../_recoil/state'
 import Sign from './_auth/sign'
 import { USER } from '../_axios/user'
+import MainHeader from '../components/headers/mainHeader'
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
   const [isUser, setIsUser] = useRecoilState(isToken)
   const getCurrentUser = useCallback(async () => {
     const data = await USER()
@@ -20,7 +21,10 @@ const Home: NextPage = () => {
   return (
     <section className="w-full h-full">
       {isUser ? (
-        <section className="overflow-y-scroll w-full h-full">Home</section>
+        <section className="overflow-y-scroll w-full h-full">
+          <MainHeader />
+          <main>Hi</main>
+        </section>
       ) : (
         <Sign />
       )}
@@ -28,4 +32,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Index
