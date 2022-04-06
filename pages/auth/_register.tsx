@@ -15,7 +15,7 @@ type RegisterForm = Pick<
   confirmPassword: string
 }
 
-function Register({ onToggle }: IRegister) {
+function _register({ onToggle }: IRegister) {
   const {
     register,
     getValues,
@@ -44,7 +44,7 @@ function Register({ onToggle }: IRegister) {
   }
 
   return (
-    <section className="w-1/3 h-full">
+    <section className="w-1/3 h-full flex flex-col justify-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="register grid grid-rows-8 gap-2"
@@ -151,4 +151,4 @@ function Register({ onToggle }: IRegister) {
   )
 }
 
-export default Register
+export default _register

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { isToken, User } from '../../_recoil/state'
+import { User } from '../../_recoil/state'
 import FormErrorMessage from '../../components/error/formErrorMessage'
 import { LOGIN } from '../../_axios/user'
-import { useSetRecoilState } from 'recoil'
+import { useRouter } from 'next/router'
 
 const socialImage = [
   {
@@ -24,8 +24,8 @@ interface ILogin {
   onToggle: () => void
 }
 
-function Login({ onToggle }: ILogin) {
-  const setToken = useSetRecoilState(isToken)
+function _login({ onToggle }: ILogin) {
+  const router = useRouter()
 
   const {
     register,
@@ -45,8 +45,9 @@ function Login({ onToggle }: ILogin) {
         return window.alert(error)
       }
       window.localStorage.setItem('access_token', token)
-      setToken(!!window.localStorage.getItem('access_token'))
       reset()
+      await router.push('/')
+      return
     } catch (e) {
       console.log(e)
     }
@@ -128,4 +129,4 @@ function Login({ onToggle }: ILogin) {
   )
 }
 
-export default Login
+export default _login
