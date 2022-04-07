@@ -2,13 +2,16 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { User } from '../../_recoil/state'
 import FormErrorMessage from '../error/formErrorMessage'
-
+import { UPDATE } from '../../_axios/user'
+import { useRouter } from 'next/router'
 
 type UpdateProfileForm = Pick<User, 'nickname' | 'password'> & {
   confirmPassword: string
 }
 
 function ProfileUpdateForm() {
+  const router = useRouter()
+
   const {
     register,
     getValues,
@@ -20,8 +23,22 @@ function ProfileUpdateForm() {
   })
 
   const onSubmit = async () => {
-    const form = getValues()
-    console.log(form)
+    if (!getValues().nickname && !getValues().password) {
+      window.alert('Please you enter nickname or password')
+      return
+    }
+    const { confirmPassword, ...form } = getValues()
+    const {
+      data: { access, message, user },
+    } = await UPDATE(form)
+    if (!access) {
+      window.alert(message)
+      return
+    }
+    window.alert(message)
+    window.localStorage.removeItem('access_token')
+    await router.push('/auth/sign')
+    return
   }
 
   return (
@@ -33,7 +50,7 @@ function ProfileUpdateForm() {
         <h2 className="text-lg">Nickname</h2>
         <input
           {...register('nickname', {
-            required: 'You must specify a nickname',
+            required: false,
             pattern: {
               value: /^[A-za-z0-9]{2,12}$/,
               message: 'Please insert a valid nickname',
@@ -43,6 +60,7 @@ function ProfileUpdateForm() {
           name="nickname"
           className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1 lg:w-96"
           placeholder="Nickname"
+          autoComplete="off"
         />
       </label>
       <section>
@@ -55,7 +73,7 @@ function ProfileUpdateForm() {
         <h2 className="text-lg">Password</h2>
         <input
           {...register('password', {
-            required: 'You must specify a password',
+            required: false,
             pattern: {
               value: /(?=.*\d)(?=.*[a-z]).{8,}/,
               message: 'Please insert a valid password',

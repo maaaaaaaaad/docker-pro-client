@@ -32,3 +32,19 @@ export const REGISTER = (
     data,
   })
 }
+
+export const UPDATE = (data: Pick<User, 'nickname' | 'password'>) => {
+  return Api({
+    method: Method.POST,
+    url: 'auth/update',
+    data,
+  })
+}
+
+export const UPLOAD_IMAGE = (image: FormData) => {
+  return Api({
+    method: Method.POST,
+    url: 'upload/avatar',
+    data: image,
+  })
+}
