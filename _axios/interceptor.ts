@@ -26,7 +26,8 @@ instance.interceptors.response.use(
     if (err.response.status === 401) {
       const token = localStorage.getItem('access_token')
       if (token) {
-        return localStorage.removeItem('access_token')
+        localStorage.removeItem('access_token')
+        return
       }
       return
     }

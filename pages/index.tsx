@@ -27,7 +27,7 @@ const Index: NextPage = () => {
     <section className="w-full h-full">
       {user ? (
         <section className="overflow-y-scroll w-full h-full">
-          <MainHeader />
+          <MainHeader avatarImage={user.avatarImage ?? null} />
           <main>{user && user.email}</main>
         </section>
       ) : (

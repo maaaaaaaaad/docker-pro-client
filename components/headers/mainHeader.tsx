@@ -1,12 +1,24 @@
 import React from 'react'
 import SearchBtn from '../inputs/searchBtn'
+import { useRouter } from 'next/router'
 
-function MainHeader() {
+interface IMainHeader {
+  avatarImage: string | null
+}
+
+function MainHeader({ avatarImage }: IMainHeader) {
+  const router = useRouter()
+
+  const goMyProfile = async () => await router.push('/auth/profile')
+  const goHome = async () => await router.push('/')
+
   return (
     <header className="w-full">
       <section className="p-2 flex justify-evenly items-center items-center lg:justify-evenly">
         <article className="flex items-center">
-          <h1 className="text-5xl mr-8">PRO</h1>
+          <h1 onClick={goHome} className="text-5xl mr-8 cursor-pointer">
+            PRO
+          </h1>
           <SearchBtn />
         </article>
 
@@ -37,9 +49,10 @@ function MainHeader() {
           </div>
           <div className="mr-6">
             <img
-              className="w-10 h-10 cursor-pointer"
-              src="/images/user.png"
+              className="w-10 h-10 cursor-pointer rounded-full"
+              src={avatarImage ?? '/images/user.png'}
               alt="default-avatar"
+              onClick={goMyProfile}
             />
           </div>
         </article>
