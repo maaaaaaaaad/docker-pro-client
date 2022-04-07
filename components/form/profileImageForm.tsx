@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useRef, useState } from 'react'
 import { UPLOAD_IMAGE } from '../../_axios/user'
+import { useSetRecoilState } from 'recoil'
+import { userState } from '../../_recoil/state'
 
 interface IProfileImageForm {
   avatarImage: string | null | undefined
@@ -9,6 +11,7 @@ function ProfileImageForm({ avatarImage }: IProfileImageForm) {
   const fileRef = useRef<HTMLInputElement>(null)
   const [imageBase64, setImgBase64] = useState<string | null>(null)
   const [imageFile, setImgFile] = useState<File | null>(null)
+  const setUser = useSetRecoilState(userState)
 
   const onClick = () => {
     fileRef.current?.click()
@@ -41,13 +44,15 @@ function ProfileImageForm({ avatarImage }: IProfileImageForm) {
     const imageFormData = new FormData()
     imageFile && imageFormData.append('image', imageFile)
     const {
-      data: { access, message },
+      data: { access, message, user },
     } = await UPLOAD_IMAGE(imageFormData)
     if (!access) {
       window.alert(message)
       return
     }
     window.alert(message)
+    setUser(user)
+    setImgBase64(null)
   }
 
   return (
