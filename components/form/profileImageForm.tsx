@@ -1,7 +1,5 @@
 import React, { ChangeEvent, useRef, useState } from 'react'
 import { UPLOAD_IMAGE } from '../../_axios/user'
-import { useSetRecoilState } from 'recoil'
-import { userState } from '../../_recoil/state'
 
 interface IProfileImageForm {
   avatarImage: string | null | undefined
@@ -50,7 +48,6 @@ function ProfileImageForm({ avatarImage }: IProfileImageForm) {
       return
     }
     window.alert(message)
-    return
   }
 
   return (
